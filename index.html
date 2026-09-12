@@ -774,7 +774,261 @@ body {
     </div>
 
     <div class="touch-flash" id="touchFlash"></div>
+<!-- =========================================================
+     STAGE 2 — FIVE REVEN EYE WORLDS
+     ========================================================= -->
 
+<nav class="worlds" aria-label="Reven Eye worlds">
+
+    <a href="#" class="world-portal portal-manga">
+        <span class="portal-number">01 / MANGA</span>
+        <span class="portal-title">MANGA</span>
+        <span class="portal-text">Enter the illustrated worlds</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-novel">
+        <span class="portal-number">02 / NOVEL</span>
+        <span class="portal-title">NOVEL</span>
+        <span class="portal-text">Enter the written worlds</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-ai">
+        <span class="portal-number">03 / VAULT</span>
+        <span class="portal-title">AI CONTENT</span>
+        <span class="portal-text">Restricted creative archive</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-characters">
+        <span class="portal-number">04 / ARCHIVE</span>
+        <span class="portal-title">CHARACTERS</span>
+        <span class="portal-text">Designs, concepts & lore</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-tee">
+        <span class="portal-number">05 / MERCH</span>
+        <span class="portal-title">TEEPUBLIC</span>
+        <span class="portal-text">Wear the Reven Eye universe</span>
+        <span class="portal-energy"></span>
+    </a>
+
+</nav>
+
+<style>
+/* =========================================================
+   STAGE 2 — WORLD PORTALS
+   ========================================================= */
+
+.worlds {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+    perspective: 1000px;
+}
+
+.world-portal {
+    position: absolute;
+    width: min(180px, 38vw);
+    min-height: 92px;
+    padding: 14px 16px;
+
+    pointer-events: auto;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+
+    border: 1px solid rgba(255, 30, 50, .25);
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(40, 5, 10, .78),
+            rgba(5, 5, 8, .42)
+        );
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.45),
+        inset 0 0 25px rgba(255,0,30,.025);
+
+    transform:
+        translate3d(
+            var(--portal-x, 0px),
+            var(--portal-y, 0px),
+            0
+        );
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease,
+        scale .3s ease;
+}
+
+.world-portal:hover {
+    border-color: rgba(255,30,50,.8);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(75,5,15,.88),
+            rgba(10,5,8,.6)
+        );
+
+    box-shadow:
+        0 20px 65px rgba(0,0,0,.6),
+        0 0 35px rgba(255,0,30,.12),
+        inset 0 0 30px rgba(255,0,30,.05);
+
+    scale: 1.06;
+}
+
+.portal-number {
+    display: block;
+    margin-bottom: 7px;
+
+    font-size: 8px;
+    letter-spacing: .28em;
+    color: rgba(255,70,90,.7);
+}
+
+.portal-title {
+    display: block;
+
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.portal-text {
+    display: block;
+    margin-top: 7px;
+
+    font-size: 8px;
+    line-height: 1.4;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+
+    color: rgba(255,255,255,.38);
+}
+
+.portal-energy {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: #ff1735;
+
+    box-shadow: 0 0 12px #ff1735;
+
+    animation: portalPulse 2s ease-in-out infinite;
+}
+
+@keyframes portalPulse {
+    50% {
+        opacity: .35;
+        transform: scale(.6);
+    }
+}
+
+/* Initial positions */
+
+.portal-manga {
+    left: 7%;
+    top: 18%;
+}
+
+.portal-novel {
+    right: 7%;
+    top: 20%;
+}
+
+.portal-ai {
+    left: 5%;
+    bottom: 19%;
+}
+
+.portal-characters {
+    right: 5%;
+    bottom: 20%;
+}
+
+.portal-tee {
+    left: 50%;
+    bottom: 8%;
+    transform:
+        translateX(-50%)
+        translate3d(
+            var(--portal-x, 0px),
+            var(--portal-y, 0px),
+            0
+        );
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .world-portal {
+        width: 145px;
+        min-height: 78px;
+        padding: 11px 12px;
+    }
+
+    .portal-title {
+        font-size: 12px;
+    }
+
+    .portal-text {
+        font-size: 7px;
+    }
+
+    .portal-manga {
+        left: 4%;
+        top: 12%;
+    }
+
+    .portal-novel {
+        right: 4%;
+        top: 12%;
+    }
+
+    .portal-ai {
+        left: 4%;
+        bottom: 22%;
+    }
+
+    .portal-characters {
+        right: 4%;
+        bottom: 22%;
+    }
+
+    .portal-tee {
+        bottom: 8%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .world-portal {
+        transition: none;
+    }
+
+    .portal-energy {
+        animation: none;
+    }
+}
+   </style>
 </main>
 
 <script>
