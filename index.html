@@ -976,3 +976,340 @@ updatePointer(
 
 </body>
 </html>
+</script>
+
+<style>
+/* =========================================================
+   STAGE 2 — FIVE REVEN EYE WORLDS
+   ========================================================= */
+
+.worlds {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+    perspective: 1000px;
+}
+
+.world-portal {
+    position: absolute;
+    width: 155px;
+    min-height: 82px;
+    padding: 13px 16px;
+
+    pointer-events: auto;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: #fff;
+
+    border: 1px solid rgba(255,20,40,.25);
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(35,0,8,.72),
+            rgba(5,5,8,.35)
+        );
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.45),
+        inset 0 0 25px rgba(255,0,30,.025);
+
+    transform-style: preserve-3d;
+
+    transition:
+        transform .4s cubic-bezier(.16,.9,.2,1),
+        border-color .3s,
+        box-shadow .3s,
+        background .3s;
+}
+
+.world-portal:hover {
+    border-color: rgba(255,20,45,.85);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(90,0,15,.75),
+            rgba(10,3,8,.4)
+        );
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.6),
+        0 0 35px rgba(255,0,30,.15);
+
+    transform:
+        translate3d(
+            var(--portal-x, 0px),
+            var(--portal-y, 0px),
+            70px
+        )
+        scale(1.07);
+}
+
+.portal-number {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 8px;
+    letter-spacing: .28em;
+
+    color: #ff1735;
+}
+
+.portal-title {
+    display: block;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    letter-spacing: .13em;
+}
+
+.portal-text {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 8px;
+    line-height: 1.4;
+
+    color: rgba(255,255,255,.4);
+}
+
+/* ---- PORTAL POSITIONS ---- */
+
+.portal-manga {
+    left: 5%;
+    top: 31%;
+}
+
+.portal-novel {
+    right: 5%;
+    top: 31%;
+}
+
+.portal-ai {
+    left: 8%;
+    bottom: 20%;
+}
+
+.portal-characters {
+    right: 8%;
+    bottom: 20%;
+}
+
+.portal-tee {
+    left: 50%;
+    bottom: 8%;
+
+    transform: translateX(-50%);
+}
+
+.portal-tee:hover {
+    transform:
+        translateX(-50%)
+        translate3d(
+            var(--portal-x, 0px),
+            var(--portal-y, 0px),
+            70px
+        )
+        scale(1.07);
+}
+
+/* Small energy line */
+
+.portal-energy {
+    position: absolute;
+
+    width: 35px;
+    height: 1px;
+
+    left: 16px;
+    bottom: 10px;
+
+    background: #ff102d;
+
+    box-shadow: 0 0 10px #ff102d;
+
+    opacity: .45;
+
+    transition: width .35s;
+}
+
+.world-portal:hover .portal-energy {
+    width: 80px;
+    opacity: 1;
+}
+
+/* ---- MOBILE ---- */
+
+@media (max-width:700px) {
+
+    .world-portal {
+        width: 125px;
+        min-height: 68px;
+
+        padding: 10px 12px;
+    }
+
+    .portal-title {
+        font-size: 10px;
+    }
+
+    .portal-text {
+        font-size: 7px;
+    }
+
+    .portal-manga {
+        left: 3%;
+        top: 25%;
+    }
+
+    .portal-novel {
+        right: 3%;
+        top: 25%;
+    }
+
+    .portal-ai {
+        left: 3%;
+        bottom: 20%;
+    }
+
+    .portal-characters {
+        right: 3%;
+        bottom: 20%;
+    }
+
+    .portal-tee {
+        bottom: 8%;
+    }
+}
+</style>
+
+<!-- =========================================================
+     FIVE WORLDS
+     ========================================================= -->
+
+<nav class="worlds" aria-label="Reven Eye worlds">
+
+    <a href="#" class="world-portal portal-manga">
+        <span class="portal-number">01 / WORLD</span>
+        <span class="portal-title">MANGA</span>
+        <span class="portal-text">Enter the illustrated worlds</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-novel">
+        <span class="portal-number">02 / WORLD</span>
+        <span class="portal-title">NOVEL</span>
+        <span class="portal-text">Enter the written worlds</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-ai">
+        <span class="portal-number">03 / VAULT</span>
+        <span class="portal-title">AI CONTENT</span>
+        <span class="portal-text">Restricted creative archive</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-characters">
+        <span class="portal-number">04 / ARCHIVE</span>
+        <span class="portal-title">CHARACTERS</span>
+        <span class="portal-text">Designs, concepts & lore</span>
+        <span class="portal-energy"></span>
+    </a>
+
+    <a href="#" class="world-portal portal-tee">
+        <span class="portal-number">05 / MERCH</span>
+        <span class="portal-title">TEEPUBLIC</span>
+        <span class="portal-text">Wear the Reven Eye universe</span>
+        <span class="portal-energy"></span>
+    </a>
+
+</nav>
+
+<script>
+/* =========================================================
+   STAGE 2 — PORTAL PARALLAX
+   ========================================================= */
+
+const portals =
+    document.querySelectorAll(".world-portal");
+
+document.addEventListener("pointermove", (event) => {
+
+    const x =
+        (event.clientX / window.innerWidth - .5);
+
+    const y =
+        (event.clientY / window.innerHeight - .5);
+
+    portals.forEach((portal, index) => {
+
+        const strength =
+            index === 4 ? 4 : 10;
+
+        portal.style.setProperty(
+            "--portal-x",
+            `${x * strength}px`
+        );
+
+        portal.style.setProperty(
+            "--portal-y",
+            `${y * strength}px`
+        );
+
+        portal.style.transform =
+            `
+            translate3d(
+                ${x * strength}px,
+                ${y * strength}px,
+                0
+            )
+            rotateY(${x * -4}deg)
+            rotateX(${y * 4}deg)
+            `;
+    });
+});
+
+/* Touch gives the selected portal a small dimensional pulse */
+
+portals.forEach((portal) => {
+
+    portal.addEventListener("pointerdown", () => {
+
+        portal.animate(
+            [
+                {
+                    transform:
+                        "scale(1)"
+                },
+                {
+                    transform:
+                        "scale(1.08)"
+                },
+                {
+                    transform:
+                        "scale(1)"
+                }
+            ],
+            {
+                duration: 350,
+                easing: "ease-out"
+            }
+        );
+
+    });
+
+});
+</script>
+
+</body>
+</html>
