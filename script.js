@@ -282,29 +282,33 @@
 
 
     function updatePointer() {
+    pointerX += (targetX - pointerX) * 0.08;
+    pointerY += (targetY - pointerY) * 0.08;
 
-        pointerX +=
-            (targetX - pointerX) * 0.08;
+    const rootStyle = document.documentElement.style;
 
-        pointerY +=
-            (targetY - pointerY) * 0.08;
+    rootStyle.setProperty("--mx", `${pointerX}%`);
+    rootStyle.setProperty("--my", `${pointerY}%`);
 
+    /*
+     * Movement energy.
+     * Faster pointer movement = more life in the universe.
+     */
+    const dx = targetX - pointerX;
+    const dy = targetY - pointerY;
 
-        document.documentElement.style.setProperty(
-            "--mx",
-            `${pointerX}%`
-        );
+    const movement = Math.min(
+        Math.sqrt(dx * dx + dy * dy) / 20,
+        1
+    );
 
-        document.documentElement.style.setProperty(
-            "--my",
-            `${pointerY}%`
-        );
+    rootStyle.setProperty(
+        "--energy",
+        movement.toFixed(3)
+    );
 
-
-        requestAnimationFrame(updatePointer);
-
+    requestAnimationFrame(updatePointer);
     }
-
 
     updatePointer();
 
