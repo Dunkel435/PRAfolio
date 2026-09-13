@@ -623,6 +623,373 @@
     ======================================================== */
 
     setSectionState("home");
+   /* =========================================================
+   LIVING UNIVERSE — INTERACTION ENGINE V1
+   ========================================================= */
+
+(() => {
+
+  const root = document.documentElement;
+  const universe = document.querySelector(".universe");
+  const core = document.querySelector(".core-wrap");
+  const halo = document.querySelector(".core-halo");
+  const experience = document.querySelector("#experience");
+
+  if (!universe || !core) return;
+
+
+  /* -------------------------------------------------------
+     State
+     ------------------------------------------------------- */
+
+  let targetX = 0;
+  let targetY = 0;
+
+  let currentX = 0;
+  let currentY = 0;
+
+  let energy = 0;
+  let targetEnergy = 0;
+
+  let lastPointerX = null;
+  let lastPointerY = null;
+  let lastPointerTime = performance.now();
+
+  let idleTimer = null;
+
+
+  /* -------------------------------------------------------
+     Utility
+     ------------------------------------------------------- */
+
+  const clamp = (value, min, max) => {
+    return Math.min(Math.max(value, min), max);
+  };
+
+
+  /* -------------------------------------------------------
+     Pointer movement
+     ------------------------------------------------------- */
+
+  window.addEventListener("pointermove", (event) => {
+
+    /*
+      Ignore touch movement here.
+      Normal mobile scrolling must remain untouched.
+    */
+
+    if (event.pointerType === "touch") return;
+
+
+    const x = event.clientX;
+    const y = event.clientY;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+
+    /*
+      Convert pointer position to -1 → +1
+    */
+
+    const normalizedX =
+      (x / width - 0.5) * 2;
+
+    const normalizedY =
+      (y / height - 0.5) * 2;
+
+
+    /*
+      Universe moves less than the core.
+    */
+
+    targetX = normalizedX * -18;
+    targetY = normalizedY * -14;
+
+
+    /*
+      Core has stronger reaction.
+    */
+
+    root.style.setProperty(
+      "--core-x",
+      `${normalizedX * 28}px`
+    );
+
+    root.style.setProperty(
+      "--core-y",
+      `${normalizedY * 22}px`
+    );
+
+
+    /*
+      Pointer glow follows cursor.
+    */
+
+    root.style.setProperty(
+      "--pointer-glow-x",
+      `${x}px`
+    );
+
+    root.style.setProperty(
+      "--pointer-glow-y",
+      `${y}px`
+    );
+
+
+    /* ---------------------------------------------------
+       Calculate pointer speed
+       --------------------------------------------------- */
+
+    const now = performance.now();
+
+    if (
+      lastPointerX !== null &&
+      lastPointerY !== null
+    ) {
+
+      const dx = x - lastPointerX;
+      const dy = y - lastPointerY;
+
+      const distance =
+        Math.sqrt(dx * dx + dy * dy);
+
+      const elapsed =
+        Math.max(now - lastPointerTime, 1);
+
+      const speed =
+        distance / elapsed;
+
+
+      targetEnergy = clamp(
+        speed * 2.5,
+        0,
+        1
+      );
+
+    }
+
+
+    lastPointerX = x;
+    lastPointerY = y;
+    lastPointerTime = now;
+
+
+    /* ---------------------------------------------------
+       Reset idle timer
+       --------------------------------------------------- */
+
+    clearTimeout(idleTimer);
+
+    idleTimer = setTimeout(() => {
+
+      targetX = 0;
+      targetY = 0;
+      targetEnergy = 0;
+
+    }, 900);
+
+  });
+
+
+  /* -------------------------------------------------------
+     Pointer leaves screen
+     ------------------------------------------------------- */
+
+  window.addEventListener("pointerleave", () => {
+
+    targetX = 0;
+    targetY = 0;
+    targetEnergy = 0;
+
+  });
+
+
+  /* -------------------------------------------------------
+     Mobile / touch interaction
+     ------------------------------------------------------- */
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+
+  window.addEventListener(
+    "pointerdown",
+    (event) => {
+
+      if (event.pointerType !== "touch") return;
+
+      touchStartX = event.clientX;
+      touchStartY = event.clientY;
+      touchStartTime = performance.now();
+
+    },
+    { passive: true }
+  );
+
+
+  window.addEventListener(
+    "pointerup",
+    (event) => {
+
+      if (event.pointerType !== "touch") return;
+
+
+      const dx =
+        event.clientX - touchStartX;
+
+      const dy =
+        event.clientY - touchStartY;
+
+      const distance =
+        Math.sqrt(dx * dx + dy * dy);
+
+      const duration =
+        performance.now() - touchStartTime;
+
+
+      /*
+        Small + quick movement = tap.
+        Don't interfere with scrolling.
+      */
+
+      if (
+        distance < 18 &&
+        duration < 350
+      ) {
+
+        triggerImpact();
+
+      }
+
+    },
+    { passive: true }
+  );
+
+
+  /* -------------------------------------------------------
+     Impact
+     ------------------------------------------------------- */
+
+  function triggerImpact() {
+
+    if (!halo) return;
+
+
+    halo.classList.remove("impact");
+
+
+    /*
+      Force browser to restart animation.
+    */
+
+    void halo.offsetWidth;
+
+
+    halo.classList.add("impact");
+
+
+    targetEnergy = 1;
+
+
+    setTimeout(() => {
+
+      targetEnergy = 0;
+
+    }, 350);
+
+  }
+
+
+  /* -------------------------------------------------------
+     Scroll interaction
+     ------------------------------------------------------- */
+
+  let scrollTarget = 0;
+
+  window.addEventListener(
+    "scroll",
+    () => {
+
+      const scrollY = window.scrollY || 0;
+
+      scrollTarget =
+        clamp(
+          scrollY / Math.max(
+            document.body.scrollHeight - window.innerHeight,
+            1
+          ),
+          0,
+          1
+        );
+
+    },
+    { passive: true }
+  );
+
+
+  /* -------------------------------------------------------
+     Animation loop
+     ------------------------------------------------------- */
+
+  function animate() {
+
+    /*
+      Smooth universe movement.
+    */
+
+    currentX +=
+      (targetX - currentX) * 0.055;
+
+    currentY +=
+      (targetY - currentY) * 0.055;
+
+
+    /*
+      Smooth energy.
+    */
+
+    energy +=
+      (targetEnergy - energy) * 0.08;
+
+
+    root.style.setProperty(
+      "--universe-x",
+      `${currentX}px`
+    );
+
+    root.style.setProperty(
+      "--universe-y",
+      `${currentY}px`
+    );
+
+    root.style.setProperty(
+      "--energy",
+      energy.toFixed(3)
+    );
+
+
+    /*
+      Very subtle scroll influence.
+      This is intentionally small.
+    */
+
+    root.style.setProperty(
+      "--scroll-depth",
+      scrollTarget.toFixed(3)
+    );
+
+
+    requestAnimationFrame(animate);
+
+  }
+
+
+  animate();
+
+
+})();
 
 
 })();
